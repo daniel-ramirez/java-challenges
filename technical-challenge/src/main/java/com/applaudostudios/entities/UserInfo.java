@@ -5,11 +5,18 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * UserInfo is an entity mapping of user_info table.
@@ -18,6 +25,7 @@ import javax.persistence.OneToOne;
  * @since       0.0.1
  */
 @Entity(name = "user_info")
+@EntityListeners(AuditingEntityListener.class)
 public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -33,15 +41,19 @@ public class UserInfo implements Serializable {
 
 	private String address;
 
+	@CreatedBy
 	@Column(name = "created_by")
 	private String createdBy;
 
+	@CreatedDate
 	@Column(name = "created_date")
 	private Timestamp createdDate;
 
+	@LastModifiedBy
 	@Column(name = "last_modified_by")
 	private String lastModifiedBy;
 
+	@LastModifiedDate
 	@Column(name = "last_modified_date")
 	private Timestamp lastModifiedDate;
 
