@@ -15,4 +15,6 @@ import com.applaudostudios.entities.Account;
 @RepositoryRestResource(path = "accounts", collectionResourceRel = "accounts")
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
+	Account findByUsername(String username);
+
 }

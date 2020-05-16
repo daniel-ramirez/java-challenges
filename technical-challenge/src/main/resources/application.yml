@@ -22,3 +22,18 @@ spring:
     hibernate:
       ddl-auto: update
     database: h2
+  security:    jwt:
+      header: Authorization
+      secret: SecretKey
+      expiration: 864_000_00 # 1 day in milliseconds
+      prefix: Bearer
+logging:
+  file: ./logs/server.log
+  group:
+    tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
+  level:
+    root: WARN
+    com.applaudostudios: TRACE
+    org.hibernate: ERROR
+    org.hibernate.SQL: INFO
+    org.springframework.web: DEBUG

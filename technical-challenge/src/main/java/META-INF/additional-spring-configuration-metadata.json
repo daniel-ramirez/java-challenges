@@ -1,0 +1,7 @@
+{"properties": [
+  {
+    "name": "spring.security.jwt",
+    "type": "java.util.Map",
+    "description": "A description for 'spring.security.jwt'"
+  }
+]}
