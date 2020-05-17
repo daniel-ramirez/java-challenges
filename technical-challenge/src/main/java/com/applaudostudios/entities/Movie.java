@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -33,17 +37,22 @@ public class Movie implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Audited
 	private String title;
 
 	private String description;
 
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	private String image;
 
 	private Integer stock;
 
+	@Audited
 	@Column(name = "rental_price")
 	private BigDecimal rentalPrice;
 
+	@Audited
 	@Column(name = "sale_price")
 	private BigDecimal salePrice;
 
