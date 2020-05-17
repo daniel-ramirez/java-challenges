@@ -18,6 +18,4 @@ import com.applaudostudios.entities.Role;
 @RepositoryRestResource(path = "roles", collectionResourceRel = "roles")
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-	List<Role> findByAccount(Account account);
-
 }

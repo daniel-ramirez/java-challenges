@@ -9,6 +9,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,22 +19,17 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Role is an entity mapping of role table.
+ * The persistent class for the account_role database table.
  * 
- * @author      Daniel Ramirez
- * @since       0.0.1
  */
-@Entity
+@Entity(name = "account_role")
 @EntityListeners(AuditingEntityListener.class)
-public class Role implements Serializable {
-
+public class AccountRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	private String name;
 
 	@CreatedBy
 	@Column(name = "created_by")
@@ -50,7 +47,17 @@ public class Role implements Serializable {
 	@Column(name = "last_modified_date")
 	private Timestamp lastModifiedDate;
 
-	public Role() {
+	// bi-directional many-to-one association to Account
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
+
+	// bi-directional many-to-one association to Role
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private Role role;
+
+	public AccountRole() {
 		super();
 	}
 
@@ -60,14 +67,6 @@ public class Role implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getCreatedBy() {
@@ -100,6 +99,22 @@ public class Role implements Serializable {
 
 	public void setLastModifiedDate(Timestamp lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

@@ -10,6 +10,13 @@ import org.springframework.stereotype.Component;
 import com.applaudostudios.entities.Account;
 import com.applaudostudios.repositories.AccountRepository;
 
+/**
+ * AccountEventHandler is an Event Handler used for encode password when is
+ * inserted or updated.
+ * 
+ * @author      Daniel Ramirez
+ * @since       0.0.1
+ */
 @Component
 @RepositoryEventHandler(Account.class)
 public class AccountEventHandler {
@@ -20,6 +27,10 @@ public class AccountEventHandler {
 	@HandleBeforeCreate
 	public void handleUserCreate(Account account) {
 		account.setPassword((new BCryptPasswordEncoder()).encode(account.getPassword()));
+		account.setAccountNonExpired(true);
+		account.setAccountNonLocked(true);
+		account.setCredentialsNonExpired(true);
+		account.setEnabled(true);
 	}
 
 	@HandleBeforeSave

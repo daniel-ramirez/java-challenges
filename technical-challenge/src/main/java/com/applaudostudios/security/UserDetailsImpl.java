@@ -51,10 +51,10 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorityList;
 		this.username = account.getUsername();
 		this.password = account.getPassword();
-		this.accountNonExpired = true;
-		this.accountNonLocked = true;
-		this.credentialsNonExpired = true;
-		this.enabled = true;
+		this.accountNonExpired = account.isAccountNonExpired();
+		this.accountNonLocked = account.isAccountNonLocked();
+		this.credentialsNonExpired = account.isCredentialsNonExpired();
+		this.enabled = account.isEnabled();
 	}
 
 	@Override
