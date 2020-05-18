@@ -4,15 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
 
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
@@ -34,7 +32,8 @@ public class Movie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "movie_id_generator", sequenceName = "movie_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_id_generator")
 	private Long id;
 
 	@Audited
@@ -42,8 +41,6 @@ public class Movie implements Serializable {
 
 	private String description;
 
-	@Lob
-	@Basic(fetch = FetchType.LAZY)
 	private String image;
 
 	private Integer stock;

@@ -32,6 +32,10 @@ public class TechnicalChallengeApplication {
 				Account account1 = new Account();
 				account1.setUsername("admin");
 				account1.setPassword((new BCryptPasswordEncoder()).encode("123456"));
+				account1.setAccountNonExpired(true);
+				account1.setAccountNonLocked(true);
+				account1.setCredentialsNonExpired(true);
+				account1.setEnabled(true);
 				account1 = accountRepository.save(account1);
 
 				Role role1 = new Role();
@@ -50,6 +54,10 @@ public class TechnicalChallengeApplication {
 				Account account2 = new Account();
 				account2.setUsername("user");
 				account2.setPassword((new BCryptPasswordEncoder()).encode("123456"));
+				account2.setAccountNonExpired(true);
+				account2.setAccountNonLocked(true);
+				account2.setCredentialsNonExpired(true);
+				account2.setEnabled(true);
 				account2 = accountRepository.save(account2);
 
 				Role role2 = new Role();

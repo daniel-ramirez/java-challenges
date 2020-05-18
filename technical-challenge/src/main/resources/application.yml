@@ -6,27 +6,28 @@ spring:
       basePath: /api
       detection-strategy: annotated
   datasource:
-    url: jdbc:h2:file:./data/appDB
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
+    url: jdbc:postgresql://ec2-54-165-36-134.compute-1.amazonaws.com:5432/d2as0fopam4kbk
+    username: vdjipwukazpecu
+    password: eee33b1029a2de7426d6b5a1f0dd8a469238a339508216c0c62f39a209778fc0
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
     hibernate:
-      ddl-auto: update
-    database: h2
-    properties:      org.hibernate.envers.audit_table_suffix: _AUD_LOG
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database: postgresql
+    properties:
+      org.hibernate.envers.audit_table_suffix: _AUD_LOG
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaultss: false
   security:    jwt:
       header: Authorization
       secret: SecretKey
-      expiration: 864_000_00 # 1 day in milliseconds
+      expiration: 3_600_000 # 60 minutes in milliseconds
       prefix: Bearer
 logging:
   file: ./logs/server.log
