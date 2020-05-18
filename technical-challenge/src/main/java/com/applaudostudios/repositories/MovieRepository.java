@@ -3,6 +3,7 @@ package com.applaudostudios.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -16,7 +17,7 @@ import com.applaudostudios.entities.Movie;
  * @since       0.0.1
  */
 @RepositoryRestResource(path = "movies", collectionResourceRel = "movies")
-public interface MovieRepository extends JpaRepository<Movie, Long> {
+public interface MovieRepository extends JpaRepository<Movie, Long>, JpaSpecificationExecutor<Movie> {
 
 	@RestResource(path = "by-title", rel = "moviesByTitles")
 	List<Movie> findByTitle(String title);
