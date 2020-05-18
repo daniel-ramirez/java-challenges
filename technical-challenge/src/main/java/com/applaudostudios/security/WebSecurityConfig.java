@@ -20,8 +20,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+	public static final String ROLE_USER = "ROLE_USER";
+
 	@Autowired
 	private UserDetailServiceImpl userDetailsService;
+
+	@Autowired
+	private JwtTokenFilter jwtTokenFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -30,12 +37,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilterBefore(new LoginFilter("/api/login", authenticationManager()),
 						UsernamePasswordAuthenticationFilter.class)
 				// Filter for other requests to check JWT in header
-				.addFilterAfter(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers(HttpMethod.POST, "/api/login").permitAll()
 				.antMatchers("/api/explorer/**").permitAll()
 				.antMatchers("/h2-console/**/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/movies").permitAll()
-				.anyRequest().authenticated().and()
+				.antMatchers(HttpMethod.GET, "/api/movies", "/api/movies/*").permitAll()
+				.antMatchers(HttpMethod.POST, "/api/movies").hasAuthority(ROLE_ADMIN)
+				.antMatchers(HttpMethod.PUT, "/api/movies/**").hasAuthority(ROLE_ADMIN)
+				.antMatchers(HttpMethod.PATCH, "/api/movies/**").hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
+				.antMatchers(HttpMethod.DELETE, "/api/movies/**").hasAuthority(ROLE_ADMIN)
+				.antMatchers(HttpMethod.GET, "api/movies/search/custom-filter").hasAuthority(ROLE_ADMIN)
+				.antMatchers("/api/purchase-orders/**/**", "/api/purchase-order-detail/**/**").authenticated()
+				.anyRequest().hasAuthority(ROLE_ADMIN).and()
 				//TODO NEED FIX - Logout is not working properly, because is not invalidating token
 				.logout(logout -> logout.deleteCookies("remove")
 						.invalidateHttpSession(true)

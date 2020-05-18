@@ -1,15 +1,16 @@
 package com.applaudostudios.security;
 
-import static java.util.Collections.emptyList;
-
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
@@ -25,6 +26,9 @@ public class JwtTokenProvider {
 	private static Long expiration;
 
 	private static String prefix;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Value("${spring.security.jwt.header}")
 	public void setAuthHeader(String authHeaderValue) {
@@ -57,17 +61,19 @@ public class JwtTokenProvider {
 		res.addHeader("Access-Control-Expose-Headers", authHeader);
 	}
 
-	public static Authentication getAuthentication(HttpServletRequest request) {
+	public Authentication getAuthentication(HttpServletRequest request) {
 		Authentication auth = null;
 		String token = request.getHeader(authHeader);
 		if (token != null) {
 			// handle scenario when token has expired or corrupted!
 			try {
-				String user = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.replace(prefix, "")).getBody()
-						.getSubject();
+				String username = Jwts.parser().setSigningKey(secret).parseClaimsJws(token.replace(prefix, ""))
+						.getBody().getSubject();
 
-				if (user != null) {
-					auth = new UsernamePasswordAuthenticationToken(user, null, emptyList());
+				if (username != null) {
+					UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+					auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(),
+							userDetails.getAuthorities());
 				}
 			} catch (Exception e) {
 				// maybe do something with this exception
